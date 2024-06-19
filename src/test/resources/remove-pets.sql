@@ -1,0 +1,3 @@
+CASCADE DELETE FROM public.pet_owner WHERE 1=1;
+
+CASCADE DELETE FROM public.pet WHERE 1=1;

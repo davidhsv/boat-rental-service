@@ -44,7 +44,7 @@ public class PetController {
     }
 
     @QueryMapping
-    public List<PetDto> eligiblePets(@Argument EligibilityCriteriaInput criterias) {
-        return petService.getEligiblePets(criterias);
+    public List<PetDto> eligiblePets(@Argument EligibilityCriteriaInput criteria) {
+        return petService.getEligiblePets(criteria);
     }
 }
