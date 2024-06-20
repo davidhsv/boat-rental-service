@@ -64,5 +64,5 @@ input EligibilityCriteriaInput {
     weightCriteria: WeightCriteriaInput
 }
 type Query {
-    eligiblePets(criteria: EligibilityCriteriaInput!): [Pet]
+    eligiblePets(after:String, before: String, criteria: EligibilityCriteriaInput!): PetConnection
 }

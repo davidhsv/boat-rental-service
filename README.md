@@ -8,7 +8,48 @@ http://localhost:8080/graphiql?path=/graphql
 
 TODO/IDEAS
 hexagonal packages
-test
+--test
 usar pageable no retorno
 
 Implement basic error handling for the API and database interactions.
+
+```json
+query {
+  eligiblePets (
+    criteria: {
+    breedCriteria: {
+      breedConditions: [
+        { breed: "Poodle", include: true }
+        { breed: "Labrador", include: true }
+      ]
+    },
+    trainingLevelCriteria: {
+      trainingLevelFrom: 1,
+      trainingLevelTo: 10
+    },
+    vaccinationCriteria: {
+      vaccinated: true
+    },
+    weightCriteria: {
+      weightFrom: 2,
+      weightTo: 100
+    }
+  }){
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        name,
+        weight,
+        petOwner {
+          name
+        }
+      }
+    }
+  }
+}
+```

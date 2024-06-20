@@ -16,10 +16,15 @@ import com.petscreening.petfriendly.boatrentalservice.repository.PetOwnerReposit
 import com.petscreening.petfriendly.boatrentalservice.repository.PetRepository;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.OffsetScrollPosition;
+import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Window;
+import org.springframework.graphql.data.query.ScrollSubrange;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +59,7 @@ public class PetService {
         return PetMapper.INSTANCE.petOwnerToPetOwnerDto(petOwner);
     }
 
-    public List<PetDto> getEligiblePets(EligibilityCriteriaInput criteriaInput) {
+    public Window<PetDto> getEligiblePets(EligibilityCriteriaInput criteriaInput, KeysetScrollPosition scrollPosition) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (criteriaInput.breedCriteria() != null) {
@@ -77,7 +82,7 @@ public class PetService {
             builder.and(weightCriteria.toPredicate(new BooleanBuilder()));
         }
 
-        List<Pet> eligiblePets = (List<Pet>) petRepository.findAll(builder);
-        return eligiblePets.stream().map(PET_MAPPER::petToPetDto).collect(Collectors.toList());
+        Window<Pet> eligiblePets = petRepository.findBy(builder, Optional.ofNullable(scrollPosition).orElse(ScrollPosition.keyset()));
+        return eligiblePets.map(PET_MAPPER::petToPetDto);
     }
 }

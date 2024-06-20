@@ -9,10 +9,15 @@ import com.petscreening.petfriendly.boatrentalservice.service.PetService;
 import com.querydsl.core.types.Predicate;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
+import graphql.relay.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.KeysetScrollPosition;
+import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Window;
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import org.springframework.graphql.data.query.ScrollSubrange;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -48,11 +53,12 @@ public class PetController {
     }
 
     @QueryMapping
-    public List<PetDto> eligiblePets(@Argument EligibilityCriteriaInput criteria) {
+    public Window<PetDto> eligiblePets(ScrollSubrange cursor,
+                                       @Argument EligibilityCriteriaInput criteria) {
         if (criteria == null || !EligibilityCriteriaInput.isAtLeastOneCriteriaProvided(criteria)) {
             throw new IllegalArgumentException("At least one criteria must be provided.");
         }
-        return petService.getEligiblePets(criteria);
+        return petService.getEligiblePets(criteria, (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()));
     }
     
 }
