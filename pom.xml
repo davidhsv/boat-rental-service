@@ -28,6 +28,12 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <starter.spring.boot.compatible.mapstruct.version>1.5.5.Final</starter.spring.boot.compatible.mapstruct.version>
+        <starter.spring.boot.compatible.lombok.version>1.18.32</starter.spring.boot.compatible.lombok.version>
+        <starter.lombok.mapstruct.binding.version>0.2.0</starter.lombok.mapstruct.binding.version>
+        <starter.spring.boot.jakarta.persistence.api.version>3.1.0</starter.spring.boot.jakarta.persistence.api.version>
+        <starter.spring.boot.jakarta.annotation.api.version>2.1.1</starter.spring.boot.jakarta.annotation.api.version>
+        <starter.spring.boot.compatible.querydsl.version>5.1.0</starter.spring.boot.compatible.querydsl.version>
     </properties>
     <dependencies>
         <dependency>
@@ -135,18 +141,18 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
+            <version>${starter.spring.boot.compatible.querydsl.version}</version>
             <classifier>jakarta</classifier>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.5.5.Final</version>
+            <version>${starter.spring.boot.compatible.mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.5.5.Final</version>
+            <version>${starter.spring.boot.compatible.mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -168,17 +174,57 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.12.1</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
                     <annotationProcessorPaths>
+                        <!-- To generate Jakarta compatible model -->
+                        <path>
+                            <groupId>com.querydsl</groupId>
+                            <artifactId>querydsl-apt</artifactId>
+                            <classifier>jakarta</classifier>
+                            <version>${starter.spring.boot.compatible.querydsl.version}</version>
+                        </path>
+                        <path>
+                            <groupId>jakarta.persistence</groupId>
+                            <artifactId>jakarta.persistence-api</artifactId>
+                            <version>${starter.spring.boot.jakarta.persistence.api.version}</version>
+                        </path>
+                        <path>
+                            <groupId>jakarta.annotation</groupId>
+                            <artifactId>jakarta.annotation-api</artifactId>
+                            <version>${starter.spring.boot.jakarta.annotation.api.version}</version>
+                        </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>1.5.5.Final</version>
+                            <version>${starter.spring.boot.compatible.mapstruct.version}</version>
                         </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${starter.spring.boot.compatible.lombok.version}</version>
+                        </path>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${starter.lombok.mapstruct.binding.version}</version>
+                        </dependency>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <compilerArg>
+                            -Amapstruct.defaultComponentModel=spring
+                        </compilerArg>
+                        <compilerArg>
+                            -Amapstruct.verbose=true
+                        </compilerArg>
+                        <compilerArgs>
+                            <!--
+                             Important:
+                             From https://github.com/querydsl/querydsl/issues/3681#issuecomment-1968182489
+                             -->
+                            -Aquerydsl.generatedAnnotationClass=jakarta.annotation.Generated
+                        </compilerArgs>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

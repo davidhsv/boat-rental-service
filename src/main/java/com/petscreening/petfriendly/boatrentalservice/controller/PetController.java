@@ -7,9 +7,13 @@ import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCr
 import com.petscreening.petfriendly.boatrentalservice.model.eligibility.EligibilityCriteria;
 import com.petscreening.petfriendly.boatrentalservice.service.PetService;
 import com.querydsl.core.types.Predicate;
+import graphql.GraphQLError;
+import graphql.GraphqlErrorBuilder;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -45,6 +49,10 @@ public class PetController {
 
     @QueryMapping
     public List<PetDto> eligiblePets(@Argument EligibilityCriteriaInput criteria) {
+        if (criteria == null || !EligibilityCriteriaInput.isAtLeastOneCriteriaProvided(criteria)) {
+            throw new IllegalArgumentException("At least one criteria must be provided.");
+        }
         return petService.getEligiblePets(criteria);
     }
+    
 }

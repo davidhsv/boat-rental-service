@@ -1,3 +1,2 @@
-CASCADE DELETE FROM public.pet_owner WHERE 1=1;
-
-CASCADE DELETE FROM public.pet WHERE 1=1;
+DELETE FROM public.pet WHERE pet_owner_id in (1001, 1002, 1003);
+DELETE FROM public.pet_owner WHERE id in (1001, 1002, 1003);

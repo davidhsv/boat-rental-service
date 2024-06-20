@@ -2,7 +2,6 @@ package com.petscreening.petfriendly.boatrentalservice.model.eligibility;
 
 import com.petscreening.petfriendly.boatrentalservice.model.QPet;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.Data;
 
 import java.util.Map;

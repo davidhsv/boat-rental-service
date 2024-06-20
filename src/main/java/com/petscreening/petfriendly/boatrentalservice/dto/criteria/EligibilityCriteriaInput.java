@@ -5,4 +5,8 @@ public record EligibilityCriteriaInput(
         TrainingLevelCriteriaInput trainingLevelCriteria,
         VaccinationCriteriaInput vaccinationCriteria,
         WeightCriteriaInput weightCriteria) {
+    public static boolean isAtLeastOneCriteriaProvided(EligibilityCriteriaInput criteria) {
+        return criteria.breedCriteria != null || criteria.vaccinationCriteria != null
+                || criteria.trainingLevelCriteria != null || criteria.weightCriteria != null;
+    }
 }

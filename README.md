@@ -9,6 +9,6 @@ http://localhost:8080/graphiql?path=/graphql
 TODO/IDEAS
 hexagonal packages
 test
-
+usar pageable no retorno
 
 Implement basic error handling for the API and database interactions.
