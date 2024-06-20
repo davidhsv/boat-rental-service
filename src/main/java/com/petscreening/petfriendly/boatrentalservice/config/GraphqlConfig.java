@@ -22,18 +22,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Configuration
-public class JacksonConfig {
-//    @Bean
-//    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-//        // The id of Pet is Long, and itś currently not working with Cursors on GraphQL
-//        // it only supports String in JsonKeysetCursorStrategy ids
-//        // because of that, we need change the PolymorphicTypeValidator to
-//        // accept Object -> Long
-//        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
-//                .allowIfBaseType(Long.class)
-//                .build();
-//        return builder -> builder.postConfigurer(objectMapper -> objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL));
-//    }
+public class GraphqlConfig {
 
     @Bean
     EncodingCursorStrategy<ScrollPosition> cursorStrategy() {
@@ -55,7 +44,7 @@ public class JacksonConfig {
                 .allowIfSubType("java.time.")
                 .allowIfSubType(Calendar.class)
                 .allowIfSubType(Date.class)
-                // added
+                // added to allow Long IDs as keys of graphQL entities
                 .allowIfSubType(Long.class)
                 .build();
 

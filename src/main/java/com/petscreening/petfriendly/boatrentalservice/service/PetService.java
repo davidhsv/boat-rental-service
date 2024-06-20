@@ -17,10 +17,8 @@ import com.petscreening.petfriendly.boatrentalservice.repository.PetRepository;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
-import org.springframework.data.domain.OffsetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
-import org.springframework.graphql.data.query.ScrollSubrange;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

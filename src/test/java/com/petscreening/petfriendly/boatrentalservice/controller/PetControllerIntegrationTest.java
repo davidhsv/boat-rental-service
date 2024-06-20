@@ -3,11 +3,6 @@ package com.petscreening.petfriendly.boatrentalservice.controller;
 import com.petscreening.petfriendly.boatrentalservice.config.TestcontainersConfiguration;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.*;
 import com.petscreening.petfriendly.boatrentalservice.model.Pet;
-import com.petscreening.petfriendly.boatrentalservice.model.PetOwner;
-import com.petscreening.petfriendly.boatrentalservice.repository.PetOwnerRepository;
-import com.petscreening.petfriendly.boatrentalservice.repository.PetRepository;
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,12 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.NestedTestConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

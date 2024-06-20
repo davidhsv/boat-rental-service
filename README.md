@@ -5,7 +5,6 @@
 
 http://localhost:8080/graphiql?path=/graphql
 
-
 TODO/IDEAS
 hexagonal packages
 --test
@@ -15,12 +14,19 @@ Implement basic error handling for the API and database interactions.
 
 ```json
 query {
-  eligiblePets (
-    criteria: {
+  eligiblePets
+  (
+  criteria: {
     breedCriteria: {
       breedConditions: [
-        { breed: "Poodle", include: true }
-        { breed: "Labrador", include: true }
+        {
+          breed: "Poodle",
+          include: true
+        }
+        {
+          breed: "Labrador",
+          include: true
+        }
       ]
     },
     trainingLevelCriteria: {
@@ -34,22 +40,23 @@ query {
       weightFrom: 2,
       weightTo: 100
     }
-  }){
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    edges {
-      node {
-        name,
-        weight,
-        petOwner {
-          name
-        }
-      }
-    }
   }
+  ){
+  pageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+edges {
+  node {
+  name,
+  weight,
+  petOwner {
+  name
+}
+}
+}
+}
 }
 ```

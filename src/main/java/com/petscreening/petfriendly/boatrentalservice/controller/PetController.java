@@ -4,28 +4,19 @@ import com.petscreening.petfriendly.boatrentalservice.dto.PetDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.PetInsertDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.PetOwnerInsertDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCriteriaInput;
-import com.petscreening.petfriendly.boatrentalservice.model.eligibility.EligibilityCriteria;
 import com.petscreening.petfriendly.boatrentalservice.service.PetService;
-import com.querydsl.core.types.Predicate;
-import graphql.GraphQLError;
-import graphql.GraphqlErrorBuilder;
-import graphql.relay.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
-import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
-import org.springframework.graphql.data.query.ScrollSubrange;
-import org.springframework.graphql.execution.ErrorType;
-import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.query.ScrollSubrange;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,5 +51,5 @@ public class PetController {
         }
         return petService.getEligiblePets(criteria, (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()));
     }
-    
+
 }

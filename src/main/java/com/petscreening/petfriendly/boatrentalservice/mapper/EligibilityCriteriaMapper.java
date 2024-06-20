@@ -1,9 +1,11 @@
 package com.petscreening.petfriendly.boatrentalservice.mapper;
 
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.*;
-import com.petscreening.petfriendly.boatrentalservice.model.eligibility.*;
+import com.petscreening.petfriendly.boatrentalservice.model.eligibility.BreedCriteria;
+import com.petscreening.petfriendly.boatrentalservice.model.eligibility.TrainingLevelCriteria;
+import com.petscreening.petfriendly.boatrentalservice.model.eligibility.VaccinationCriteria;
+import com.petscreening.petfriendly.boatrentalservice.model.eligibility.WeightCriteria;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.stream.Collectors;

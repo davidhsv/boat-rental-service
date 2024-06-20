@@ -2,25 +2,20 @@ package com.petscreening.petfriendly.boatrentalservice.controller;
 
 import com.petscreening.petfriendly.boatrentalservice.dto.PetDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.*;
-import com.petscreening.petfriendly.boatrentalservice.service.PetService;
 import com.petscreening.petfriendly.boatrentalservice.model.Pet;
 import com.petscreening.petfriendly.boatrentalservice.model.PetOwner;
+import com.petscreening.petfriendly.boatrentalservice.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @GraphQlTest(PetController.class)
 public class PetControllerTest {
