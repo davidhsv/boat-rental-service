@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 public interface EligibilityCriteriaMapper {
     EligibilityCriteriaMapper INSTANCE = Mappers.getMapper(EligibilityCriteriaMapper.class);
 
-    TrainingLevelCriteria toTrainingLevelCriteria(TrainingLevelCriteriaInput trainingLevelCriteriaInput);
+    TrainingLevelCriteria toTrainingLevelCriteria(TrainingLevelCriteriaInputDto trainingLevelCriteriaInputDto);
 
-    VaccinationCriteria toVaccinationCriteria(VaccinationCriteriaInput vaccinationCriteriaInput);
+    VaccinationCriteria toVaccinationCriteria(VaccinationCriteriaInputDto vaccinationCriteriaInputDto);
 
-    WeightCriteria toWeightCriteria(WeightCriteriaInput weightCriteriaInput);
+    WeightCriteria toWeightCriteria(WeightCriteriaInputDto weightCriteriaInputDto);
 
-    default BreedCriteria mapBreedCriteriaInputToBreedCriteria(BreedCriteriaInput breedCriteriaInput) {
-        return new BreedCriteria(breedCriteriaInput.breedConditions().stream()
-                .collect(Collectors.toMap(BreedConditionInput::breed, BreedConditionInput::include)));
+    default BreedCriteria mapBreedCriteriaInputToBreedCriteria(BreedCriteriaInputDto breedCriteriaInputDto) {
+        return new BreedCriteria(breedCriteriaInputDto.breedConditions().stream()
+                .collect(Collectors.toMap(BreedConditionInputDto::breed, BreedConditionInputDto::include)));
     }
 }

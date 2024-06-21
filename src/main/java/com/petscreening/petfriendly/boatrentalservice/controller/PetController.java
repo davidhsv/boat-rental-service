@@ -2,8 +2,8 @@ package com.petscreening.petfriendly.boatrentalservice.controller;
 
 import com.petscreening.petfriendly.boatrentalservice.dto.PetDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.PetInsertDto;
-import com.petscreening.petfriendly.boatrentalservice.dto.PetOwnerInsertDto;
-import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCriteriaInput;
+import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCriteriaInputDto;
+import com.petscreening.petfriendly.boatrentalservice.service.EligibilityCriteriaService;
 import com.petscreening.petfriendly.boatrentalservice.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,40 +16,26 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.query.ScrollSubrange;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class PetController {
     private final PetService petService;
-
-    @QueryMapping
-    public PetDto petById(@Argument Long id) {
-        return petService.getPetById(id);
-    }
-
-    @QueryMapping
-    public List<PetDto> pets() {
-        return petService.getAllPets();
-    }
+    private final EligibilityCriteriaService eligibilityCriteriaService;
 
     @MutationMapping
-    public PetDto addPet(@Argument @Valid PetInsertDto petDto) {
-        return petService.addPet(petDto);
-    }
-
-    @MutationMapping
-    public PetOwnerInsertDto addPetOwner(@Argument @Valid PetOwnerInsertDto petOwnerInsertDto) {
-        return petService.addPetOwner(petOwnerInsertDto);
+    public PetDto addPet(@Argument @Valid PetInsertDto pet) {
+        return petService.addPet(pet);
     }
 
     @QueryMapping
     public Window<PetDto> eligiblePets(ScrollSubrange cursor,
-                                       @Argument EligibilityCriteriaInput criteria) {
-        if (criteria == null || !EligibilityCriteriaInput.isAtLeastOneCriteriaProvided(criteria)) {
-            throw new IllegalArgumentException("At least one criteria must be provided.");
-        }
-        return petService.getEligiblePets(criteria, (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()));
+                                       @Argument @Valid EligibilityCriteriaInputDto criteria) {
+        return eligibilityCriteriaService.getEligiblePets(criteria, (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()));
     }
 
+    @QueryMapping
+    public Boolean checkEligibility(@Argument Long petId,
+                                    @Argument @Valid EligibilityCriteriaInputDto criteria) {
+        return eligibilityCriteriaService.checkEligibility(petId, criteria);
+    }
 }

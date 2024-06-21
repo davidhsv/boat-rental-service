@@ -1,0 +1,24 @@
+query EligiblePets($before: String, $criteria: EligibilityCriteriaInput!) {
+    eligiblePets(before: $before, criteria: $criteria) {
+     pageInfo {
+       hasPreviousPage
+       hasNextPage
+       startCursor
+       endCursor
+     }
+     edges {
+       cursor
+       node {
+         id
+         name
+         weight
+         breed
+         vaccinated
+         trainingLevel
+         petOwner {
+           name
+         }
+       }
+     }
+   }
+}

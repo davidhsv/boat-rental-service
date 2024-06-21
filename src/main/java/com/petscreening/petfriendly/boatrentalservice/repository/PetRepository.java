@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface PetRepository extends JpaRepository<Pet, Long>, QuerydslPredicateExecutor<Pet> {
+
+    int LIMIT = 20;
+
     default Window<Pet> findBy(Predicate criteria, KeysetScrollPosition scrollPosition) {
         return this.findBy(criteria, (query) -> {
-            query = query.limit(10);
+            query = query.limit(LIMIT);
             return query.scroll(scrollPosition);
         });
 

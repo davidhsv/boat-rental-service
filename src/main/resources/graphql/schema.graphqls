@@ -30,8 +30,7 @@ input PetOwnerInput {
 }
 
 type Mutation {
-    addPet(petInput: PetInput!): Pet
-    addPetOwner(petOwnerInput: PetOwnerInput!): PetOwner
+    addPet(pet: PetInput!): Pet
 }
 
 input BreedCriteriaInput {
@@ -65,4 +64,5 @@ input EligibilityCriteriaInput {
 }
 type Query {
     eligiblePets(after:String, before: String, criteria: EligibilityCriteriaInput!): PetConnection
+    checkEligibility(petId: ID!, criteria: EligibilityCriteriaInput!): Boolean
 }
