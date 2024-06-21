@@ -1,0 +1,16 @@
+mutation AddPet($pet: PetInput!) {
+    addPet(pet: $pet) {
+        id
+        name
+        weight
+        breed
+        vaccinated
+        trainingLevel
+        petOwner {
+            id
+            name
+            contactInfo
+        }
+    }
+}
+

@@ -1,0 +1,7 @@
+query CheckEligibility($petId: ID!, $criteria: EligibilityCriteriaInput!) {
+    checkEligibility(
+        petId:$petId,
+        criteria: $criteria
+    )
+}
+

@@ -3,6 +3,7 @@ package com.petscreening.petfriendly.boatrentalservice.controller;
 import com.petscreening.petfriendly.boatrentalservice.config.HttpGraphqlTesterConfig;
 import com.petscreening.petfriendly.boatrentalservice.config.TestcontainersConfiguration;
 import com.petscreening.petfriendly.boatrentalservice.dto.PetDto;
+import com.petscreening.petfriendly.boatrentalservice.dto.PetInsertDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.*;
 import com.petscreening.petfriendly.boatrentalservice.model.Pet;
 import com.petscreening.petfriendly.boatrentalservice.util.TestUtilService;
@@ -25,6 +26,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -220,6 +222,126 @@ public class PetControllerIntegrationTest {
                         assertThat(petConnection.getPageInfo().getStartCursor()).isNotNull();
                         assertThat(petConnection.getPageInfo().getEndCursor()).isNotNull();
                     });
+        }
+    }
+    
+    @Nested
+    @Sql(scripts = "classpath:add-pets.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+    @DisplayName("Check Eligibility by Pet Query Tests")
+    class CheckEligibilityByPetQueryTests {
+        String query = testUtilService.getTestResource("checkEligiblePet.graphql");
+
+        @Test
+        @DisplayName("Should return true when pet is eligible")
+        void testCheckEligiblePet() {
+            // Given
+            var petId = 1113;
+            var criteriaInput = new EligibilityCriteriaInputDto(
+                    new BreedCriteriaInputDto(List.of(new BreedConditionInputDto("Poodle", true),
+                            new BreedConditionInputDto("Labrador", true))),
+                    new TrainingLevelCriteriaInputDto(1, 8),
+                    new VaccinationCriteriaInputDto(true),
+                    new WeightCriteriaInputDto(2.0f, 100.0f)
+            );
+
+            // When & Then
+            httpGraphQlTester.document(query)
+                    .variable("petId", petId)
+                    .variable("criteria", criteriaInput)
+                    .execute()
+                    .path("checkEligibility")
+                    .entity(Boolean.class)
+                    .isEqualTo(true);
+        }
+
+        @Test
+        @DisplayName("Should return false when pet is not eligible")
+        void testCheckIneligiblePet() {
+            // Given
+            var petId = 1113;
+
+            var criteriaInput = new EligibilityCriteriaInputDto(
+                    new BreedCriteriaInputDto(List.of(new BreedConditionInputDto("Poodle", true),
+                            new BreedConditionInputDto("Labrador", true))),
+                    new TrainingLevelCriteriaInputDto(10, 10),
+                    new VaccinationCriteriaInputDto(true),
+                    new WeightCriteriaInputDto(2.0f, 100.0f)
+            );
+
+            // When & Then
+            httpGraphQlTester.document(query)
+                    .variable("petId", petId)
+                    .variable("criteria", criteriaInput)
+                    .execute()
+                    .path("checkEligibility")
+                    .entity(Boolean.class)
+                    .isEqualTo(false);
+        }
+
+        @Test
+        @DisplayName("Should return false when pet does not exist")
+        void testCheckNonExistentPet() {
+            // Given
+            var petId = 999999;
+
+            var criteriaInput = new EligibilityCriteriaInputDto(
+                    new BreedCriteriaInputDto(List.of(new BreedConditionInputDto("Poodle", true),
+                            new BreedConditionInputDto("Labrador", true))),
+                    new TrainingLevelCriteriaInputDto(1, 8),
+                    new VaccinationCriteriaInputDto(true),
+                    new WeightCriteriaInputDto(2.0f, 100.0f)
+            );
+
+            // When & Then
+            httpGraphQlTester.document(query)
+                    .variable("petId", petId)
+                    .variable("criteria", criteriaInput)
+                    .execute()
+                    .path("checkEligibility")
+                    .entity(Boolean.class)
+                    .isEqualTo(false);
+        }
+    }
+    
+    @Nested
+    @Sql(scripts = "classpath:add-pets.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+    @DisplayName("Pet Adding Mutation Tests")
+    class PetAddingMutationTests {
+        String mutation = testUtilService.getTestResource("addPet.graphql");
+
+        @Test
+        @DisplayName("Should add a new pet")
+        void testAddPet() {
+            // Given
+            var petInput = new PetInsertDto("Poodle", 5.0d, "Poodle", true, 10, 1001L);
+
+            // When & Then
+            httpGraphQlTester.document(mutation)
+                    .variable("pet", petInput)
+                    .execute()
+                    .path("addPet")
+                    .entity(PetDto.class)
+                    .satisfies(pet -> {
+                        assertThat(pet.breed()).isEqualTo("Poodle");
+                        assertThat(pet.trainingLevel()).isEqualTo(10);
+                        assertThat(pet.vaccinated()).isTrue();
+                        assertThat(pet.weight()).isEqualTo(5.0f);
+                    });
+        }
+
+        @Test
+        @DisplayName("Should return error when adding a pet with invalid data")
+        void testAddPetWithInvalidData() {
+            // Given
+            var petInput = new PetInsertDto("Poodle", -5.0d, "Poodle", true, 10, 1001L);
+
+            // When & Then
+            httpGraphQlTester.document(mutation)
+                    .variable("pet", petInput)
+                    .execute()
+                    .errors()
+                    .expect(error -> !error.getMessage().isEmpty())
+                    .verify();
         }
     }
 }
