@@ -1,6 +1,7 @@
 package com.petscreening.petfriendly.boatrentalservice.service;
 
 import com.cosium.spring.data.jpa.entity.graph.domain2.DynamicEntityGraph;
+import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraphType;
 import com.petscreening.petfriendly.boatrentalservice.dto.PetDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCriteriaInputDto;
 import com.petscreening.petfriendly.boatrentalservice.mapper.EligibilityCriteriaMapper;
@@ -42,8 +43,8 @@ public class EligibilityCriteriaService {
         Window<Pet> eligiblePets = petRepository.findBy(builder,
                 Optional.ofNullable(scrollPosition).orElse(ScrollPosition.keyset()),
                 selectionSet.contains("**petOwner") ?
-                        PetEntityGraph.____().petOwner().____.____() :
-                        PetEntityGraph.____().____());
+                        PetEntityGraph.____(EntityGraphType.FETCH).petOwner().____.____() :
+                        PetEntityGraph.____(EntityGraphType.FETCH).____());
         return eligiblePets.map(PetMapper.INSTANCE::petToPetDto);
     }
 
