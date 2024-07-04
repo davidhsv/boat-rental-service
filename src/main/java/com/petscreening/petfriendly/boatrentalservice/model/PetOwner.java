@@ -2,8 +2,10 @@ package com.petscreening.petfriendly.boatrentalservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +18,19 @@ import java.util.Objects;
 @Table(name = "pet_owner")
 public class PetOwner {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "pet_owner_id_seq"
+    )
+    // replace when this is finished https://github.com/vladmihalcea/hypersistence-utils/issues/728
+    @GenericGenerator(
+            name = "pet_owner_id_seq",
+            strategy = "io.hypersistence.utils.hibernate.id.BatchSequenceGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = "sequence", value = "pet_owner_id_seq"),
+                    @org.hibernate.annotations.Parameter(name = "fetch_size", value = "30")
+            }
+    )
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name")
@@ -25,7 +39,17 @@ public class PetOwner {
     private String contactInfo;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner", cascade = CascadeType.ALL)
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
+    
+    public void addPet(Pet pet) {
+        pets.add(pet);
+        pet.setPetOwner(this);
+    }
+    
+    public void removePet(Pet pet) {
+        pets.remove(pet);
+        pet.setPetOwner(null);
+    }
 
     @Override
     public final boolean equals(Object o) {

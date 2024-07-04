@@ -2,6 +2,7 @@ package com.petscreening.petfriendly.boatrentalservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -15,7 +16,19 @@ import java.util.Objects;
 @Table(name = "pet")
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "post_id_seq"
+    )
+    // replace when this is finished https://github.com/vladmihalcea/hypersistence-utils/issues/728
+    @GenericGenerator(
+            name = "post_id_seq",
+            strategy = "io.hypersistence.utils.hibernate.id.BatchSequenceGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = "sequence", value = "post_id_seq"),
+                    @org.hibernate.annotations.Parameter(name = "fetch_size", value = "30")
+            }
+    )
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name")
