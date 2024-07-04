@@ -29,7 +29,8 @@ public class Pet {
     @Column(name = "training_level")
     private Integer trainingLevel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumn(name = "pet_owner_id")
     private PetOwner petOwner;
 

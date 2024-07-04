@@ -24,7 +24,7 @@ public class PetOwner {
     @Column(name = "contact_info")
     private String contactInfo;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petOwner", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "petOwner", cascade = CascadeType.ALL)
     private List<Pet> pets;
 
     @Override

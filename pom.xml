@@ -34,6 +34,8 @@
         <starter.spring.boot.jakarta.persistence.api.version>3.1.0</starter.spring.boot.jakarta.persistence.api.version>
         <starter.spring.boot.jakarta.annotation.api.version>2.1.1</starter.spring.boot.jakarta.annotation.api.version>
         <starter.spring.boot.compatible.querydsl.version>5.1.0</starter.spring.boot.compatible.querydsl.version>
+        <datasource-proxy-spring-boot-starter.version>1.9.0</datasource-proxy-spring-boot-starter.version>
+        <spring-data-jpa-entity-graph.version>3.2.2</spring-data-jpa-entity-graph.version>
     </properties>
     <dependencies>
         <dependency>
@@ -155,6 +157,16 @@
             <version>${starter.spring.boot.compatible.mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+            <version>${datasource-proxy-spring-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cosium.spring.data</groupId>
+            <artifactId>spring-data-jpa-entity-graph</artifactId>
+            <version>${spring-data-jpa-entity-graph.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -203,6 +215,16 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${starter.spring.boot.compatible.lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-jpamodelgen</artifactId>
+                            <version>${hibernate.version}</version>
+                        </path>
+                        <path>
+                            <groupId>com.cosium.spring.data</groupId>
+                            <artifactId>spring-data-jpa-entity-graph-generator</artifactId>
+                            <version>${spring-data-jpa-entity-graph.version}</version>
                         </path>
                         <dependency>
                             <groupId>org.projectlombok</groupId>

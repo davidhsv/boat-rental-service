@@ -5,6 +5,8 @@ import com.petscreening.petfriendly.boatrentalservice.dto.PetInsertDto;
 import com.petscreening.petfriendly.boatrentalservice.dto.criteria.EligibilityCriteriaInputDto;
 import com.petscreening.petfriendly.boatrentalservice.service.EligibilityCriteriaService;
 import com.petscreening.petfriendly.boatrentalservice.service.PetService;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.DataFetchingFieldSelectionSet;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
@@ -29,8 +31,12 @@ public class PetController {
 
     @QueryMapping
     public Window<PetDto> eligiblePets(ScrollSubrange cursor,
-                                       @Argument @Valid EligibilityCriteriaInputDto criteria) {
-        return eligibilityCriteriaService.getEligiblePets(criteria, (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()));
+                                       @Argument @Valid EligibilityCriteriaInputDto criteria,
+                                       DataFetchingEnvironment environment) {
+        DataFetchingFieldSelectionSet selectionSet = environment.getSelectionSet();
+        return eligibilityCriteriaService.getEligiblePets(criteria,
+                (KeysetScrollPosition) cursor.position().orElse(ScrollPosition.keyset()),
+                selectionSet);
     }
 
     @QueryMapping
