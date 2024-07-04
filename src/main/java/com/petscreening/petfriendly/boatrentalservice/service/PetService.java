@@ -20,6 +20,7 @@ import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class PetService {
     private final PetRepository petRepository;
     private final PetOwnerRepository petOwnerRepository;
 
+    @Transactional
     public PetDto addPet(PetInsertDto petDto) {
         Pet pet = PetMapper.INSTANCE.petDtoToPet(petDto);
         PetOwner petOwner = petOwnerRepository.findById(petDto.petOwnerId())

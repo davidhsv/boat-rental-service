@@ -21,6 +21,7 @@ import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public class EligibilityCriteriaService {
     private final PetRepository petRepository;
     private final QuerydslCriteriaAdapter querydslCriteriaAdapter;
 
+    @Transactional(readOnly = true)
     public Window<PetDto> getEligiblePets(EligibilityCriteriaInputDto criteriaInput,
                                           KeysetScrollPosition scrollPosition,
                                           DataFetchingFieldSelectionSet selectionSet) {
@@ -45,6 +47,7 @@ public class EligibilityCriteriaService {
         return eligiblePets.map(PetMapper.INSTANCE::petToPetDto);
     }
 
+    @Transactional(readOnly = true)
     public Boolean checkEligibility(Long petId, EligibilityCriteriaInputDto criteria) {
         BooleanBuilder criteriaBooleanBuilder = getCriteriaBooleanBuilder(criteria);
         criteriaBooleanBuilder.and(QPet.pet.id.eq(petId));
