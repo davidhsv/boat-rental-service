@@ -42,7 +42,7 @@ public class EligibilityCriteriaService {
 
         Window<Pet> eligiblePets = petRepository.findBy(builder,
                 Optional.ofNullable(scrollPosition).orElse(ScrollPosition.keyset()),
-                selectionSet.contains("**petOwner") ?
+                selectionSet.contains("petOwner") ?
                         PetEntityGraph.____(EntityGraphType.FETCH).petOwner().____.____() :
                         PetEntityGraph.____(EntityGraphType.FETCH).____());
         return eligiblePets.map(PetMapper.INSTANCE::petToPetDto);
