@@ -22,6 +22,7 @@ public interface PetMapper extends LazyLoadingAwareMapper {
 
     @Condition
     default boolean isNotLazyLoadedPetOwner(PetOwner sourceCollection) {
-        return isNotLazyLoaded(sourceCollection);
+        return true;
+        //return isNotLazyLoaded(sourceCollection);
     }
 }
